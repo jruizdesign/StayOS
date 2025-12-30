@@ -1,8 +1,10 @@
 
-import { initializeApp } from 'firebase/app';
+import { initializeApp, getApps, getApp} from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getAI, getGenerativeModel, GoogleAIBackend } from 'firebase/ai';
 // Your web app's Firebase configuration
+
+
 const firebaseConfig = {
   apiKey: "AIzaSyAjy0c23LT9SztfJecn0CtXkQXYIsurXSc",
   authDomain: "gen-lang-client-0876167477.firebaseapp.com",
@@ -13,8 +15,16 @@ const firebaseConfig = {
   measurementId: "G-T4JF04RTD1"
 };
 
+function initializeFirebase() {
+  if (!getApps().length) { // Check if default app already exists
+    initializeApp(firebaseConfig);
+  }
+  // Optional: return the default app instance
+  // return getApp();
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const ai = getAI(firebaseApp, { backend: new GoogleAIBackend() });
 const model = getGenerativeModel(ai, { model: "gemini-2.5-flash" });
+}
 export const db = getFirestore(app);
+
