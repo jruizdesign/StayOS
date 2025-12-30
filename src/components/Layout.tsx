@@ -14,7 +14,8 @@ import {
   ShieldCheck,
   Menu,
   X,
-  PieChart
+  PieChart,
+  Terminal // Import Terminal icon
 } from 'lucide-react';
 
 const NAV_ITEMS: NavItem[] = [
@@ -23,6 +24,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Rooms', path: '/rooms', icon: BedDouble, allowedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.FRONT_DESK, UserRole.HOUSEKEEPING] },
   { label: 'Housekeeping', path: '/housekeeping', icon: SprayCan, allowedRoles: [UserRole.ADMIN, UserRole.MANAGER, UserRole.HOUSEKEEPING] },
   { label: 'Accounting', path: '/accounting', icon: PieChart, allowedRoles: [UserRole.ADMIN, UserRole.MANAGER] },
+  { label: 'System Logs', path: '/logs', icon: Terminal, allowedRoles: [UserRole.ADMIN, UserRole.MANAGER] }, // Add Logs to nav
   { label: 'Settings', path: '/settings', icon: Settings, allowedRoles: [UserRole.ADMIN] },
 ];
 

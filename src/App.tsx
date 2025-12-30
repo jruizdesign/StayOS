@@ -10,6 +10,7 @@ import Rooms from './pages/Rooms';
 import Housekeeping from './pages/Housekeeping';
 import Accounting from './pages/Accounting';
 import Login from './pages/Login';
+import SystemLogsPage from './pages/SystemLogsPage';
 import AIAssistant from './components/AIAssistant';
 
 // Private Route Wrapper
@@ -32,6 +33,7 @@ const AppContent: React.FC = () => {
                     <Route path="rooms" element={<Rooms />} />
                     <Route path="housekeeping" element={<Housekeeping />} />
                     <Route path="accounting" element={<Accounting />} />
+                    <Route path="logs" element={<SystemLogsPage />} />
                     <Route path="*" element={<Navigate to="/" />} />
                 </Route>
             </Routes>

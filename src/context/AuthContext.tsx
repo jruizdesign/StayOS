@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { User, UserRole } from '../types';
+import { logAction } from '../services/dataService';
 
 interface AuthContextType {
   user: User | null;
@@ -23,9 +24,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       avatarUrl: 'https://picsum.photos/200/200',
     };
     setUser(mockUser);
+    
+    // Log the login action
+    logAction('LOGIN', `User logged in as ${role}`, 'AUTH', { id: mockUser.id, name: mockUser.name });
   };
 
   const logout = () => {
+    if (user) {
+        logAction('LOGOUT', `User ${user.name} logged out`, 'AUTH', { id: user.id, name: user.name });
+    }
     setUser(null);
   };
 
