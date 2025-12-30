@@ -1,9 +1,6 @@
-
-import { initializeApp, getApps, getApp} from 'firebase/app';
+import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getAI, getGenerativeModel, GoogleAIBackend } from 'firebase/ai';
-// Your web app's Firebase configuration
-
 
 const firebaseConfig = {
   apiKey: "AIzaSyAjy0c23LT9SztfJecn0CtXkQXYIsurXSc",
@@ -15,16 +12,14 @@ const firebaseConfig = {
   measurementId: "G-T4JF04RTD1"
 };
 
-function initializeFirebase() {
-  if (!getApps().length) { // Check if default app already exists
-    initializeApp(firebaseConfig);
-  }
-  // Optional: return the default app instance
-  return getApp();
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const ai = getAI(firebaseApp, { backend: new GoogleAIBackend() });
-const model = getGenerativeModel(ai, { model: "gemini-2.5-flash" });
-}
+const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+
+// Initialize Services
 export const db = getFirestore(app);
 
+// Initialize Vertex AI
+const ai = getAI(app, { backend: new GoogleAIBackend() });
+export const model = getGenerativeModel(ai, { model: "gemini-2.5-flash" });
+
+export default app;
