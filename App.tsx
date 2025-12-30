@@ -1,6 +1,8 @@
+
 import React from 'react';
 import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { DemoModeProvider } from './context/DemoModeContext'; // Import DemoModeProvider
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import Bookings from './pages/Bookings';
@@ -41,9 +43,11 @@ const AppContent: React.FC = () => {
 const App: React.FC = () => {
   return (
     <AuthProvider>
-      <HashRouter>
-        <AppContent />
-      </HashRouter>
+      <DemoModeProvider> {/* Wrap with DemoModeProvider */}
+        <HashRouter>
+          <AppContent />
+        </HashRouter>
+      </DemoModeProvider>
     </AuthProvider>
   );
 };

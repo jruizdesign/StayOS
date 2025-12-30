@@ -1,6 +1,8 @@
+
 import React from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useDemoMode } from '../context/DemoModeContext'; // Import useDemoMode
 import { UserRole, NavItem } from '../types';
 import { 
   LayoutDashboard, 
@@ -26,6 +28,7 @@ const NAV_ITEMS: NavItem[] = [
 
 const Layout: React.FC = () => {
   const { user, logout } = useAuth();
+  const { isDemoMode, toggleDemoMode } = useDemoMode();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
@@ -67,6 +70,20 @@ const Layout: React.FC = () => {
                <p className="text-xs text-slate-400 capitalize">{user.role.replace('_', ' ')}</p>
              </div>
            </div>
+           {/* Demo Mode Toggle */}
+           <div className="mt-4 pt-4 border-t border-slate-800 flex items-center justify-between">
+              <span className="text-sm font-medium text-slate-300">Demo Mode</span>
+              <label htmlFor="demo-toggle" className="relative inline-flex items-center cursor-pointer">
+                  <input 
+                      type="checkbox" 
+                      id="demo-toggle" 
+                      className="sr-only peer" 
+                      checked={isDemoMode} 
+                      onChange={toggleDemoMode} 
+                  />
+                  <div className="w-11 h-6 bg-slate-700 rounded-full peer peer-focus:ring-2 peer-focus:ring-blue-500 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+              </label>
+            </div>
         </div>
 
         <nav className="flex-1 overflow-y-auto py-4">
