@@ -1,6 +1,9 @@
+if (!process.env.GEMINI_API_KEY) {
+    throw new Error("GEMINI_API_KEY environment variable is not set");
+}
 
 import React from 'react';
-import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { DemoModeProvider } from './context/DemoModeContext'; // Import DemoModeProvider
 import Layout from './components/Layout';
@@ -44,9 +47,9 @@ const App: React.FC = () => {
   return (
     <AuthProvider>
       <DemoModeProvider> {/* Wrap with DemoModeProvider */}
-        <HashRouter>
+        <BrowserRouter>
           <AppContent />
-        </HashRouter>
+        </BrowserRouter>
       </DemoModeProvider>
     </AuthProvider>
   );
