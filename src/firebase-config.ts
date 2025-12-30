@@ -20,7 +20,7 @@ function initializeFirebase() {
     initializeApp(firebaseConfig);
   }
   // Optional: return the default app instance
-  // return getApp();
+  return getApp();
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const ai = getAI(firebaseApp, { backend: new GoogleAIBackend() });
