@@ -1,6 +1,6 @@
 
-import { Booking, Room, RoomStatus, Transaction, RoomType, BookingStatus } from '../types';
-import { collection, getDocs, doc, updateDoc } from 'firebase/firestore';
+import { Booking, Room, RoomStatus, Transaction, RoomType, BookingStatus, SystemLog } from '../types';
+import { collection, getDocs, doc, updateDoc, addDoc, query, orderBy, limit } from 'firebase/firestore';
 import { db } from '../firebase-config';
 
 // MOCK DATA for Demo Mode
@@ -65,6 +65,44 @@ let rooms = [...MOCK_ROOMS];
 let bookings = [...MOCK_BOOKINGS];
 let transactions = [...MOCK_TRANSACTIONS];
 
+// --- LOGGING SERVICE ---
+export const logAction = async (action: string, details: string, module: SystemLog['module'], user?: { id: string, name: string }) => {
+  const logEntry: Omit<SystemLog, 'id'> = {
+    action,
+    details,
+    module,
+    timestamp: new Date().toISOString(),
+    userId: user?.id || 'system',
+    userName: user?.name || 'System',
+  };
+
+  console.log('[SYSTEM LOG]', logEntry);
+
+  if (!isDemoMode()) {
+    try {
+      await addDoc(collection(db, 'system_logs'), logEntry);
+    } catch (e) {
+      console.error("Failed to save log to Firestore", e);
+    }
+  }
+};
+
+export const getSystemLogs = async (): Promise<SystemLog[]> => {
+  if (isDemoMode()) {
+    // Return dummy logs for demo mode
+    return [
+      { id: 'l1', action: 'LOGIN', details: 'User logged in', module: 'AUTH', timestamp: new Date().toISOString(), userId: 'u1', userName: 'Demo User' },
+      { id: 'l2', action: 'UPDATE_ROOM', details: 'Room 101 marked as DIRTY', module: 'ROOMS', timestamp: new Date(Date.now() - 100000).toISOString(), userId: 'u1', userName: 'Demo User' },
+    ];
+  }
+  
+  const logsCol = collection(db, 'system_logs');
+  const q = query(logsCol, orderBy('timestamp', 'desc'), limit(50));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as SystemLog));
+};
+
+
 // Function to check if demo mode is enabled. 
 // For now, we will use a simple localStorage flag.
 const isDemoMode = () => localStorage.getItem('isDemoMode') !== 'false';
@@ -88,6 +126,9 @@ export const getRooms = async (): Promise<Room[]> => {
 };
 
 export const updateRoomStatus = async (roomId: string, status: RoomStatus): Promise<Room> => {
+    // Log the action
+    await logAction('UPDATE_ROOM_STATUS', `Room ${roomId} status changed to ${status}`, 'ROOMS');
+
   if (isDemoMode()) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {

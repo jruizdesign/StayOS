@@ -11,6 +11,7 @@ import {
   Area
 } from 'recharts';
 import StatCard from '../components/StatCard';
+import SystemLogs from '../components/SystemLogs'; // Import SystemLogs component
 import { DollarSign, Users, BedDouble, CalendarCheck } from 'lucide-react';
 import { getRecentRevenue } from '../services/dataService';
 
@@ -96,32 +97,9 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* Activity Feed */}
-        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
-            <h3 className="text-lg font-semibold text-slate-800 mb-4">Recent Activity</h3>
-            <div className="space-y-6">
-                {[
-                    { text: 'Room 304 checked out', time: '10 mins ago', type: 'out' },
-                    { text: 'New booking from Expedia', time: '25 mins ago', type: 'book' },
-                    { text: 'Housekeeping requested Room 201', time: '1 hour ago', type: 'clean' },
-                    { text: 'Room 105 checked in', time: '2 hours ago', type: 'in' },
-                ].map((item, i) => (
-                    <div key={i} className="flex items-start space-x-3">
-                        <div className={`w-2 h-2 mt-2 rounded-full ${
-                            item.type === 'out' ? 'bg-orange-400' :
-                            item.type === 'in' ? 'bg-green-400' :
-                            item.type === 'clean' ? 'bg-red-400' : 'bg-blue-400'
-                        }`} />
-                        <div>
-                            <p className="text-sm text-slate-700 font-medium">{item.text}</p>
-                            <p className="text-xs text-slate-400">{item.time}</p>
-                        </div>
-                    </div>
-                ))}
-            </div>
-            <button className="w-full mt-6 py-2 text-sm text-blue-600 font-medium bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
-                View All Activity
-            </button>
+        {/* Activity Feed (Replaced with SystemLogs) */}
+        <div className="lg:col-span-1">
+            <SystemLogs />
         </div>
       </div>
     </div>

@@ -81,3 +81,13 @@ export interface ChatMessage {
   text: string;
   timestamp: number;
 }
+
+export interface SystemLog {
+  id: string;
+  action: string;
+  details: string;
+  userId: string;
+  userName: string;
+  timestamp: string; // ISO Date string
+  module: 'AUTH' | 'ROOMS' | 'BOOKINGS' | 'SYSTEM';
+}
