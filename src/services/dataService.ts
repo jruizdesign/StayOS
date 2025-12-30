@@ -52,12 +52,29 @@ const MOCK_BOOKINGS: Booking[] = [
   }
 ];
 
+const MOCK_TRANSACTIONS: Transaction[] = [
+  { id: 't1', date: '2023-10-25', description: 'Room 301 Payment', category: 'Revenue', amount: 1200, type: 'INCOME', status: 'COMPLETED' },
+  { id: 't2', date: '2023-10-24', description: 'Laundry Service Vendor', category: 'Operations', amount: 450, type: 'EXPENSE', status: 'COMPLETED' },
+  { id: 't3', date: '2023-10-24', description: 'Minibar Restock', category: 'F&B', amount: 1200, type: 'EXPENSE', status: 'PENDING' },
+  { id: 't4', date: '2023-10-23', description: 'Room 104 Payment', category: 'Revenue', amount: 850, type: 'INCOME', status: 'COMPLETED' },
+  { id: 't5', date: '2023-10-22', description: 'Maintenance Supplies', category: 'Maintenance', amount: 320, type: 'EXPENSE', status: 'COMPLETED' },
+  { id: 't6', date: '2023-10-21', description: 'Bar Revenue', category: 'F&B', amount: 2400, type: 'INCOME', status: 'COMPLETED' },
+];
+
 let rooms = [...MOCK_ROOMS];
 let bookings = [...MOCK_BOOKINGS];
+let transactions = [...MOCK_TRANSACTIONS];
 
 // Function to check if demo mode is enabled. 
 // For now, we will use a simple localStorage flag.
 const isDemoMode = () => localStorage.getItem('isDemoMode') !== 'false';
+
+// Function to reset demo data
+export const resetDemoData = () => {
+  rooms = [...MOCK_ROOMS];
+  bookings = [...MOCK_BOOKINGS];
+  transactions = [...MOCK_TRANSACTIONS];
+};
 
 
 export const getRooms = async (): Promise<Room[]> => {
@@ -129,14 +146,11 @@ export const getFinancialSummary = async (): Promise<{month: string, income: num
 };
 
 export const getTransactions = async (): Promise<Transaction[]> => {
-  return new Promise((resolve) => {
-    setTimeout(() => resolve([
-      { id: 't1', date: '2023-10-25', description: 'Room 301 Payment', category: 'Revenue', amount: 1200, type: 'INCOME', status: 'COMPLETED' },
-      { id: 't2', date: '2023-10-24', description: 'Laundry Service Vendor', category: 'Operations', amount: 450, type: 'EXPENSE', status: 'COMPLETED' },
-      { id: 't3', date: '2023-10-24', description: 'Minibar Restock', category: 'F&B', amount: 1200, type: 'EXPENSE', status: 'PENDING' },
-      { id: 't4', date: '2023-10-23', description: 'Room 104 Payment', category: 'Revenue', amount: 850, type: 'INCOME', status: 'COMPLETED' },
-      { id: 't5', date: '2023-10-22', description: 'Maintenance Supplies', category: 'Maintenance', amount: 320, type: 'EXPENSE', status: 'COMPLETED' },
-      { id: 't6', date: '2023-10-21', description: 'Bar Revenue', category: 'F&B', amount: 2400, type: 'INCOME', status: 'COMPLETED' },
-    ]), 400);
-  });
+  if (isDemoMode()) {
+    return new Promise((resolve) => setTimeout(() => resolve(transactions), 400));
+  }
+  const transactionsCol = collection(db, 'transactions');
+  const transactionSnapshot = await getDocs(transactionsCol);
+  const transactionList = transactionSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Transaction));
+  return transactionList;
 };
